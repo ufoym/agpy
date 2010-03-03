@@ -1,0 +1,5 @@
+#summary Convolution
+
+= Convolve.py =
+
+Small piece of code that uses numpy or scipy ffts to convolve two images.  Also has a wrapper to _smooth_ an image with a kernel of a given size.
