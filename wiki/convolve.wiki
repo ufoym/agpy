@@ -1,5 +1,13 @@
 #summary Convolution
 
-= Convolve.py =
+== Convolve ==
 
 Small piece of code that uses numpy or scipy ffts to convolve two images.  Also has a wrapper to _smooth_ an image with a kernel of a given size.
+
+[http://code.google.com/p/agpy/source/browse/trunk/agpy/convolve.py convolve.py]
+
+== Correlate2d ==
+
+Code to cross-correlate two images (or autocorrelate).  This can be used to make a power-spectral-density image or power spectra.
+
+[http://code.google.com/p/agpy/source/browse/trunk/agpy/correlate2d.py correlate2d.py]
