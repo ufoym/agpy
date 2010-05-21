@@ -1,0 +1,12 @@
+#summary RADEX codes description
+#labels Featured
+
+[http://www.strw.leidenuniv.nl/~moldata/radex.html RADEX] is a one-dimensional non-LTE radiative transfer code base on the LAMDA molecular database.
+
+----
+
+I have written two codes to use RADEX more efficiently:
+
+  *  [http://code.google.com/p/agpy/source/browse/trunk/radex/radex_grid.py radex_grid.py] is an executable that is intended to be user-modified.  It will create a grid (cube) over density, column, and temperature parameter space.  It can be run in parallel using mpi4py and mpirun.
+
+  *  [http://code.google.com/p/agpy/source/browse/trunk/radex/plot_grids.py plot_grids.py] is meant to plot the resulting data and/or turn it into .fits data cubes.
