@@ -44,4 +44,4 @@ f2py -f fplfit.f -m fplfit
 
 For usage examples, view speedcompare_plfit.py and plfit_tests.py
 
-*If you use this code, please cite Clauset et al 2009, and consider posting a comment below.*
+*If you use this code, please cite Clauset et al 2009 and consider posting a comment below.*
