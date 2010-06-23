@@ -1,6 +1,4 @@
 ﻿#labels powerlaw
-.#summary Python implementation of a power-law distribution fitter.
-
 = Power-law Distribution Fitting =
 
 Aaron Clauset et al. address the issue of fitting power-laws to distributions on [http://www.santafe.edu/~aaronc/powerlaws/ this website] and in their paper [http://arxiv.org/abs/0706.1062 Power-law distributions in empirical data].  I have created a python implementation of their code because I didn't have matlab or R and wanted to do some power-law fitting. 
@@ -45,4 +43,4 @@ f2py -f fplfit.f -m fplfit
 
 For usage examples, view speedcompare_plfit.py and plfit_tests.py
 
-*If you use this code, please cite Clauset et al 2007, and consider posting a comment below*
+*If you use this code, please cite Clauset et al 2009, and consider posting a comment below.*
