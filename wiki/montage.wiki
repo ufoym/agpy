@@ -1,4 +1,4 @@
-#Description of the 'montage' script
+#summary Description of the 'montage' script
 
 = montage =
 
@@ -7,4 +7,4 @@
 [http://code.google.com/p/agpy/source/browse/trunk/agpy/montage montage] is a bash script I've written to minimize the overhead in generating a mosaiced image.  It uses (requires) [http://python-montage.sourceforge.net/ Tom Robitaille's python-montage] python code.  
 
 Usage example:
-montage outfile=l089_reference_montage.fits 0*_indiv13pca*_map01.fits combine=median &
+montage outfile=l089_reference_montage.fits 0`*``_`indiv13pca`*``_`map01.fits combine=median &
