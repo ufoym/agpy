@@ -6,6 +6,8 @@
 
 Many of these tools are meant to replicate capabilities of the starlink package, but to be used in the context of python codes that are capable of making publication-quality figures.
 
+Source code: [http://code.google.com/p/agpy/source/browse/trunk/agpy/cubes.py]
+
 = Details =
 
 Recent addition: smooth_cube will smooth each frame of a cube in parallel using [http://www.astropython.org/snippet/2010/3/Parallel-map-using-multiprocessing parallel_map] and the multiprocessing package from [http://code.google.com/u/Brian.Refsdal/ Brian Refsdal].
