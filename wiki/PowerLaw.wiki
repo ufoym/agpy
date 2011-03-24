@@ -39,7 +39,7 @@ To install the cython function, run:
 python setup.py build_ext --inplace
 
 To install the fortran function, run:
-f2py -f fplfit.f -m fplfit
+f2py -c fplfit.f -m fplfit
 
 
 For usage examples, view speedcompare_plfit.py and plfit_tests.py
