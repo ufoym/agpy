@@ -33,7 +33,9 @@ test_fitter uses the previous two functions to test the fitter's ability to retu
 
 The powerlaw fitter is very effective at returning the correct value of alpha but not as good at returning the correct value of xmin.
 
-There are 3 implementations of the code internals.  fplfit.f is a fortran function, cplfit.pyx is a cython function, and plfit.py is the wrapper and includes a python-only implementation.  FORTRAN is fastest, follow closely by cython.  Python is ~3x slower.
+There are 3 implementations of the code internals.  fplfit.f is a fortran function, cplfit.pyx is a cython function, and plfit.py is the wrapper and includes a python-only implementation that requires numpy.  FORTRAN is fastest, follow closely by cython.  Python is ~3x slower.  
+
+As of November 21, 2011, there is a pure python (i.e., no numpy) implementation at [http://code.google.com/p/agpy/source/browse/trunk/plfit/plfit_py.py plfit_py.py].  It's slower and hobbled, but I think it works...
 
 To install the cython function, run:
 python setup.py build_ext --inplace
