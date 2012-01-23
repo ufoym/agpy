@@ -1,4 +1,6 @@
 #summary macvim-skim instructions
+#labels macvim-skim
+= MacVim with Skim.app =
 
 You can get the source at [http://agpy.googlecode.com/svn/trunk/macvim-skim/],
 or grab the install script (which will download the relevant files) from
