@@ -7,7 +7,14 @@ or grab the install script (which will download the relevant files) from
 [http://agpy.googlecode.com/svn/trunk/macvim-skim/macvim-skim-install.sh].
 
 
-Known bugs:
+= What does it do? =
+
+This plugin makes macvim and skim work together.  command-shift-click on a line in Skim to bring up the MacVim window with the .tex file open to the clicked line.  Use one of the commands below, e.g. *`,p`* , to compile the tex document and open it to the selected line in Skim.  Example:
+
+[http://agpy.googlecode.com/svn/trunk/macvim-skim/test/Example_MacvimSkim.png]
+
+
+= Known bugs =
 
 !WhichTab.vim uses <a href="http://vimdoc.sourceforge.net/htmldoc/eval.html#bufname()">
 bufname</a>, which will fail silently if there are multiple files with the same
