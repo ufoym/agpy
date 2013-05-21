@@ -251,7 +251,7 @@ def convolvend(array, kernel, boundary='fill', fill_value=0,
             # add the shape lists (max of a list of length 4) (smaller)
             # also makes the shapes square
             fsize = 2**np.ceil(np.log2(np.max(arrayshape+kernshape)))
-        newshape = np.array([fsize for ii in range(ndim)])
+        newshape = np.array([fsize for ii in range(array.ndim)])
     else:
         if psf_pad:
             # just add the biggest dimensions
