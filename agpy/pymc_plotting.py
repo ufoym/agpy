@@ -36,22 +36,25 @@ def hist2d(MC, varname1, varname2, varslice=None,
         contourcmd=pylab.contourf,
         clear=False,
         colorbar=True,
-        doerrellipse=True,
+        doerrellipse=False,
+        chain=None,
         **kwargs):
     """
     Create a 2D histogram of the MCMC data over some Trace range
     """
-    try:
+    try: # if input is just a dict of arrays
         histvals,xvals,yvals = pylab.histogram2d(MC[varname1].squeeze(),MC[varname2].squeeze(),**kwargs)
     except TypeError:
         if varslice is None:
-            histvals,xvals,yvals = pylab.histogram2d(MC.trace(varname1)[:].squeeze(),
-                                                     MC.trace(varname2)[:].squeeze(),
-                                                     **kwargs)
+            histvals,xvals,yvals = pylab.histogram2d(
+                MC.trace(varname1,chain=chain)[:].squeeze(),
+                MC.trace(varname2,chain=chain)[:].squeeze(),
+                **kwargs)
         else:
-            histvals,xvals,yvals = pylab.histogram2d(MC.trace(varname1)[slice(*varslice)].squeeze(),
-                                                     MC.trace(varname2)[slice(*varslice)].squeeze(),
-                                                     **kwargs)
+            histvals,xvals,yvals = pylab.histogram2d(
+                MC.trace(varname1,chain=chain)[slice(*varslice)].squeeze(),
+                MC.trace(varname2,chain=chain)[slice(*varslice)].squeeze(),
+                **kwargs)
 
     levels = [find_percentile(histvals, p*100) for p in percentiles]
     
@@ -68,9 +71,12 @@ def hist2d(MC, varname1, varname2, varslice=None,
     axis.set_xlabel(varname1); 
     axis.set_ylabel(varname2); 
     if colorbar: 
-        cb = pylab.colorbar(); 
-        cb.ax.set_yticks(levels); 
-        cb.ax.set_yticklabels(ticklabels)
+        try:
+            cb = pylab.colorbar(); 
+            cb.ax.set_yticks(levels); 
+            cb.ax.set_yticklabels(ticklabels)
+        except Exception as e:
+            print "Colorbar failed with exception ",e
 
     if doerrellipse:
         errellipse(MC,varname1,varname2)
@@ -84,6 +90,7 @@ def gkde_contours(MC, varname1, varname2, varslice=None,
         ngridpts=101,
         clear=False,):
     """
+    Contours for kernel densit estimate... to compare to real contours
     """
     import scipy.stats
     data1 = MC.trace(varname1)[slice(*varslice)]
@@ -104,15 +111,25 @@ def gkde_contours(MC, varname1, varname2, varslice=None,
     pylab.ylabel(varname2); 
 
 
-def plot_mc_hist(MC,field,onesided=True,bins=50,**kwargs):
+def plot_mc_hist(MC,field,varslice=None,onesided=True,bins=50,chain=None,**kwargs):
     """
     Plot a histogram with 1,2,3-sigma bars
     """
-    field_data = MC.trace(field)[:]
+    try:
+        field_data = MC[field].squeeze()
+    except TypeError:
+        field_data = MC.trace(field,chain=chain)[:]
+    if varslice is not None:
+        field_data = field_data[slice(*varslice)]
+
+    field_stats = {'mean': field_data.mean()}
     if onesided:
-        field_stats = MC.trace(field).stats(quantiles=[68.2689,95.44997,99.7300,50])
+        #field_stats = MC.trace(field,chain=chain).stats(quantiles=[68.2689,95.44997,99.7300,50])
+        field_stats['quantiles'] = {q:np.percentile(field_data,q) for q in [68.2689,95.44997,99.7300,50]}
     else:
-        field_stats = MC.trace(field).stats(quantiles=[0.135,2.275,15.866,84.134,97.725,99.865,50])
+        #field_stats = MC.trace(field,chain=chain).stats(quantiles=[0.135,2.275,15.866,84.134,97.725,99.865,50])
+        field_stats['quantiles'] = {q:np.percentile(field_data,q) for q in [0.135,2.275,15.866,84.134,97.725,99.865,50]}
+
     vpts = field_stats['quantiles']
     field_data_sorted = np.sort(field_data)
     h,l,p = pylab.hist(field_data,bins=bins,histtype='stepfilled',**kwargs)
