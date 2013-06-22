@@ -117,7 +117,7 @@ def gkde_contours(MC, varname1, varname2, varslice=None,
 
 
 def plot_mc_hist(MC, field, varslice=None, onesided=True, bins=50, chain=None,
-                 **kwargs):
+        lolim=False, legloc='best', **kwargs):
     """
     Plot a histogram with 1,2,3-sigma bars
     """
@@ -131,7 +131,10 @@ def plot_mc_hist(MC, field, varslice=None, onesided=True, bins=50, chain=None,
     field_stats = {'mean': field_data.mean()}
     if onesided:
         #field_stats = MC.trace(field,chain=chain).stats(quantiles=[68.2689,95.44997,99.7300,50])
-        field_stats['quantiles'] = {q:np.percentile(field_data,q) for q in [68.2689,95.44997,99.7300,50]}
+        quantiles = {1:68.2689,2:95.44997,3:99.7300,'m':50}
+        if lolim:
+            quantiles = {k:100-q for k,q in quantiles.iteritems()}
+        field_stats['quantiles'] = {k:np.percentile(field_data,q) for k,q in quantiles.iteritems()}
     else:
         #field_stats = MC.trace(field,chain=chain).stats(quantiles=[0.135,2.275,15.866,84.134,97.725,99.865,50])
         field_stats['quantiles'] = {q:np.percentile(field_data,q) for q in [0.135,2.275,15.866,84.134,97.725,99.865,50]}
@@ -146,9 +149,9 @@ def plot_mc_hist(MC, field, varslice=None, onesided=True, bins=50, chain=None,
         ylim = ax.get_ylim()
     #fieldlen = len(field_data)
     if onesided:
-        pylab.vlines(vpts[68.2689], *ylim,linewidth=3, alpha=0.5, color='k',label="$1\\sigma$")
-        pylab.vlines(vpts[95.44997],*ylim,linewidth=3, alpha=0.5, color='r',label="$2\\sigma$")
-        pylab.vlines(vpts[99.7300], *ylim,linewidth=3, alpha=0.5, color='g',label="$3\\sigma$")
+        pylab.vlines(vpts[1], *ylim,linewidth=3, alpha=0.5, color='k',label="$1\\sigma$")
+        pylab.vlines(vpts[2],*ylim,linewidth=3, alpha=0.5, color='r',label="$2\\sigma$")
+        pylab.vlines(vpts[3], *ylim,linewidth=3, alpha=0.5, color='g',label="$3\\sigma$")
     else:
         pylab.vlines(field_stats['mean'],*ylim,color='k', linestyle='--', linewidth=3, alpha=0.5, label="$\mu$")
         pylab.vlines(vpts[50],*ylim, color='b', linestyle='--', linewidth=3, alpha=0.5, label="$\mu_{1/2}$")
@@ -156,4 +159,4 @@ def plot_mc_hist(MC, field, varslice=None, onesided=True, bins=50, chain=None,
         pylab.vlines([vpts[02.275],vpts[97.725]],*ylim,color='r',linewidth=3, alpha=0.5, label="$2\\sigma$")
         pylab.vlines([vpts[00.135],vpts[99.865]],*ylim,color='g',linewidth=3, alpha=0.5, label="$3\\sigma$")
     ax.set_ylim(*ylim)
-    pylab.legend(loc='best')
+    pylab.legend(loc=legloc)
