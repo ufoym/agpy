@@ -11,6 +11,8 @@ types of random data.
 """
 import numpy
 
+def ordinary_least_squares(data1, data2, error=None):
+    pass
 
 def PCA_linear_fit(data1, data2, print_results=False, ignore_nans=True):
     """
