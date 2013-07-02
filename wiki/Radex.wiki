@@ -3,6 +3,9 @@
 
 [http://www.strw.leidenuniv.nl/~moldata/radex.html RADEX] is a one-dimensional non-LTE radiative transfer code base on the LAMDA molecular database.
 
+For a nice package that wraps up RADEX calls in python, see:
+https://github.com/keflavich/pyradex
+
 ----
 
 I have written two codes to use RADEX more efficiently:
