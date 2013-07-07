@@ -99,7 +99,7 @@ def modified_blackbody(nu,temperature,beta=1.75, logN=22, logscale=0.0,
         The blackbody modification value; the blackbody function is multiplied
         by :math:`(1-exp(-(\\nu/\\nu_0)**\\beta))`
     logN : float
-        The log column denisty to be fit
+        The log column density to be fit
     logscale : float
         An arbitrary logarithmic scale to apply to the blackbody function
         before passing it to mpfit; this is meant to prevent numerical
