@@ -117,7 +117,7 @@ def gkde_contours(MC, varname1, varname2, varslice=None,
 
 
 def plot_mc_hist(MC, field, varslice=None, onesided=True, bins=50, chain=None,
-        lolim=False, legloc='best', **kwargs):
+        axis=None, lolim=False, legloc='best', legend=True, **kwargs):
     """
     Plot a histogram with 1,2,3-sigma bars
     """
@@ -140,23 +140,57 @@ def plot_mc_hist(MC, field, varslice=None, onesided=True, bins=50, chain=None,
         field_stats['quantiles'] = {q:np.percentile(field_data,q) for q in [0.135,2.275,15.866,84.134,97.725,99.865,50]}
 
     vpts = field_stats['quantiles']
+    if axis is None:
+        ax = pylab.gca()
+    else:
+        ax = axis
     #field_data_sorted = np.sort(field_data)
-    h,l,p = pylab.hist(field_data,bins=bins,histtype='stepfilled',**kwargs)
-    ax = pylab.gca()
+    h,l,p = ax.hist(field_data,bins=bins,histtype='stepfilled',**kwargs)
     if kwargs.get('normed'):
         ylim = [0,h.max()*1.01]
     else:
         ylim = ax.get_ylim()
     #fieldlen = len(field_data)
     if onesided:
-        pylab.vlines(vpts[1], *ylim,linewidth=3, alpha=0.5, color='k',label="$1\\sigma$")
-        pylab.vlines(vpts[2],*ylim,linewidth=3, alpha=0.5, color='r',label="$2\\sigma$")
-        pylab.vlines(vpts[3], *ylim,linewidth=3, alpha=0.5, color='g',label="$3\\sigma$")
+        ax.vlines(vpts[1], *ylim,linewidth=3, alpha=0.5, color='k',label="$1\\sigma$")
+        ax.vlines(vpts[2],*ylim,linewidth=3, alpha=0.5, color='r',label="$2\\sigma$")
+        ax.vlines(vpts[3], *ylim,linewidth=3, alpha=0.5, color='g',label="$3\\sigma$")
     else:
-        pylab.vlines(field_stats['mean'],*ylim,color='k', linestyle='--', linewidth=3, alpha=0.5, label="$\mu$")
-        pylab.vlines(vpts[50],*ylim, color='b', linestyle='--', linewidth=3, alpha=0.5, label="$\mu_{1/2}$")
-        pylab.vlines([vpts[15.866],vpts[84.134]],*ylim,color='k',linewidth=3, alpha=0.5, label="$1\\sigma$")
-        pylab.vlines([vpts[02.275],vpts[97.725]],*ylim,color='r',linewidth=3, alpha=0.5, label="$2\\sigma$")
-        pylab.vlines([vpts[00.135],vpts[99.865]],*ylim,color='g',linewidth=3, alpha=0.5, label="$3\\sigma$")
+        ax.vlines(field_stats['mean'],*ylim,color='k', linestyle='--', linewidth=3, alpha=0.5, label="$\mu$")
+        ax.vlines(vpts[50],*ylim, color='b', linestyle='--', linewidth=3, alpha=0.5, label="$\mu_{1/2}$")
+        ax.vlines([vpts[15.866],vpts[84.134]],*ylim,color='k',linewidth=3, alpha=0.5, label="$1\\sigma$")
+        ax.vlines([vpts[02.275],vpts[97.725]],*ylim,color='r',linewidth=3, alpha=0.5, label="$2\\sigma$")
+        ax.vlines([vpts[00.135],vpts[99.865]],*ylim,color='g',linewidth=3, alpha=0.5, label="$3\\sigma$")
     ax.set_ylim(*ylim)
-    pylab.legend(loc=legloc)
+    if legend:
+        ax.legend(loc=legloc)
+    #ax.set_xlabel(field)
+
+def autocorr_diagnostics(mc):
+    traces = mc.db._traces
+    ntraces = len(traces)
+    npanels = np.ceil(np.sqrt(ntraces))
+
+    for ii,(k,v) in enumerate(traces.iteritems()):
+        if v[:].ndim > 1: 
+            d = v[:,0].squeeze()
+        else:
+            d = v[:].squeeze()
+        pylab.subplot(npanels, npanels, ii+1)
+        ft = np.fft.fft(d)
+        ac = np.fft.ifft(ft*ft[::-1])
+        frq = np.fft.fftfreq(ac.size)
+        pylab.plot(frq,ac,',')
+
+def trace_diagnostics(mc):
+    traces = mc.db._traces
+    ntraces = len(traces)
+    npanels = np.ceil(np.sqrt(ntraces))
+
+    for ii,(k,v) in enumerate(traces.iteritems()):
+        if v[:].ndim > 1: 
+            d = v[:,0].squeeze()
+        else:
+            d = v[:].squeeze()
+        pylab.subplot(npanels, npanels, ii+1)
+        pylab.plot(d,',')
