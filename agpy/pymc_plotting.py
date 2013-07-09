@@ -72,6 +72,7 @@ def hist2d(MC, varname1, varname2, varslice=None,
     if axis is not None:
         contourcmd = eval('axis.'+contourcmd.__name__)
     cntr = contourcmd(xax, yax, histvals.swapaxes(0,1), levels+[histvals.max()], colors=colors)
+    # hack to fix opacity
     axis.set_xlabel(varname1)
     axis.set_ylabel(varname2)
     if colorbar:
@@ -84,6 +85,7 @@ def hist2d(MC, varname1, varname2, varslice=None,
 
     if doerrellipse:
         errellipse(MC,varname1,varname2)
+    return axis
 
 
 def gkde_contours(MC, varname1, varname2, varslice=None,
@@ -164,7 +166,8 @@ def plot_mc_hist(MC, field, varslice=None, onesided=True, bins=50, chain=None,
     ax.set_ylim(*ylim)
     if legend:
         ax.legend(loc=legloc)
-    #ax.set_xlabel(field)
+
+    return ax
 
 def autocorr_diagnostics(mc):
     traces = mc.db._traces
