@@ -46,7 +46,10 @@ def hist2d(MC, varname1, varname2, varslice=None,
     Create a 2D histogram of the MCMC data over some Trace range
     """
     try: # if input is just a dict of arrays
-        histvals,xvals,yvals = pylab.histogram2d(MC[varname1].squeeze(),MC[varname2].squeeze(),**kwargs)
+        if varslice is None:
+            histvals,xvals,yvals = pylab.histogram2d(MC[varname1].squeeze(),MC[varname2].squeeze(),**kwargs)
+        else:
+            histvals,xvals,yvals = pylab.histogram2d(MC[varname1][slice(*varslice)].squeeze(),MC[varname2][slice(*varslice)].squeeze(),**kwargs)
     except TypeError:
         if varslice is None:
             histvals,xvals,yvals = pylab.histogram2d(
