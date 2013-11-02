@@ -4,13 +4,29 @@ import numpy as np
 #import matplotlib as mpl
 pl.rc('font',size=24)
 
+_savefig = pl.savefig
+def savefig(fn, **kwargs):
+    if '.pdf' in fn:
+        _savefig(fn.replace('.pdf','.png'),**kwargs)
+    _savefig(fn,**kwargs)
+pl.savefig=savefig
+
 ymin = 1e-7
 bgpsf = np.array([250,294.6])
 bgpsw = 3e2/bgpsf
 irasf = np.array([3.61445783e+12,2.50000000e+12])/1e9
 irasw = 3e2/irasf
-gpaf = np.array([8,15])
+gpaf = np.array([8,15.])
 gpaw = 3e2/gpaf
+labocaf = np.array([301,386.])
+labocaw = 3e2/labocaf
+
+spirelongf = np.array([484,742.])
+spiremidf = np.array([722,1027.])
+spireshortf = np.array([1009,1449.])
+spirelongw = 3e2/spirelongf
+spiremidw = 3e2/spiremidf
+spireshortw = 3e2/spireshortf
 
 scubaherschelf = np.array([1000,4500])
 scubaherschelf = np.array([325,4500])
@@ -31,9 +47,9 @@ pl.clf()
 pl.fill_between(bgpsw,[1e-5,1e-5],[7e-2,7e-2],color='r',alpha=0.5)
 pl.fill_between(irasw,[3e-2,3e-2],[1e0,1e0],color='b',alpha=0.5)
 pl.fill_between(gpaw,[1e-6,1e-6],[5e-5,5e-5],color='g',alpha=0.5)
-pl.annotate('Bolocam',(bgpsw.mean(),1e-1),ha='center')
-pl.annotate('IRAS',(irasw.mean(),1.2),ha='center')
-pl.annotate('GPA',(gpaw.mean(),8e-5),ha='center')
+pl.annotate('Bolocam',(bgpsw.mean(),1e-1),ha='center',color='r')
+pl.annotate('IRAS',(irasw.mean(),1.2),ha='center',color='b')
+pl.annotate('GPA',(gpaw.mean(),8e-5),ha='center',color='g')
 pl.loglog(wav_cm*10,wbb+wff, color='k', linewidth=3)
 pl.loglog(wav_cm*10,wgb+wff, color='k', linewidth=5, alpha=0.5)
 pl.loglog(wav_cm*10,wgbC+wff/1e1, color=(0.3,0,0), linewidth=5, alpha=0.5)
@@ -42,7 +58,17 @@ pl.ylabel(r"B$_\nu$(T)")
 pl.axis([min(wav_cm*10),max(wav_cm*10),ymin,10])
 pl.gca().set_xticklabels(["%i" % x if x >= 1 else "%0.2f" % x for x in pl.gca().get_xticks()])
 pl.savefig("BolocamIRASGPA_Wavelength.pdf")
-pl.fill_between(scubaherschelw,[1e-6,1e-6],[3,3],color='c',alpha=0.5)
+labf = pl.fill_between(labocaw,[1e-5,1e-5],[7e-2,7e-2],color=(1,0,0.2),alpha=0.5)
+laba = pl.annotate('LABOCA',(labocaw.mean(),2e-1),ha='center',color='m')
+pl.savefig("BolocamIRASGPA_LABOCA_Wavelength.pdf")
+pl.fill_between(spirelongw,[1e-5,1e-5],[9e-2,9e-2],color=(0.9,0,0.5),alpha=0.5)
+pl.fill_between(spiremidw,[1e-5,1e-5],[2e-1,2e-1],color=(0.5,0,0.8),alpha=0.5)
+pl.fill_between(spireshortw,[1e-5,1e-5],[3e-1,3e-1],color=(0.2,0,0.9),alpha=0.5)
+laba = pl.annotate('SPIRE',(spiremidw.mean(),5e-1),ha='center',color=(0.5,0,0.8))
+
+#labf.set_visible(False)
+#laba.set_visible(False)
+#pl.fill_between(scubaherschelw,[1e-6,1e-6],[3,3],color='c',alpha=0.5)
 pl.savefig("BolocamIRASGPA_Wavelength_scubaherschel.pdf")
 
 freq = 3e10/wav_cm
